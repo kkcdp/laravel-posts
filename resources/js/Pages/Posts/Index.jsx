@@ -22,8 +22,9 @@ export default function Dashboard({auth, posts}) {
                     {posts.map((post)=>{
                         return(
                             <div key={post.id} className="p-6 text-gray-900">
-                            {post.body}
+                                {post.body}
                             </div>
+                        
                         )
                     })}
 
