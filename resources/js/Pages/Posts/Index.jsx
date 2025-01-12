@@ -1,7 +1,31 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 
-export default function Dashboard({auth, posts}) {
+export default function Index({ auth, posts, now }) {
+    const { data, setData, post, processing, errors, reset, clearErrors } =
+        useForm('StorePost', {
+            body: "",
+        });
+
+    const page = usePage();
+
+    function submit(e) {
+        e.preventDefault();
+        post(route('posts.store'), {
+            onSuccess: () => {
+                reset('body');
+            },
+        });
+    }
+
+    function refreshPosts() {
+        router.visit(route('posts.index'), {
+            only: ['posts'],
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -12,39 +36,77 @@ export default function Dashboard({auth, posts}) {
             }
         >
             <Head title="Posts">
-                <meta name='description' content='Posts Index'/>
+                <meta name="description" content="Posts Index" />
+
             </Head>
 
 
             <div className="bg-gray-100 min-h-screen p-4">
+            <div>
+                <p>Time: {now}</p>
+            </div>
+
             <div className="mt-4 p-4">
-    <form className="flex flex-col mx-auto gap-2 max-w-lg">
+    <form
+    onSubmit={submit}
+    className="flex flex-col mx-auto gap-2 max-w-lg">
         <fieldset className="contents">
             <div className="flex flex-col">
                 <label htmlFor="input" className="font-semibold text-lg">
                     Enter your post
 				</label>
-                <textarea name="input" id="input" rows="5" maxLength="256" required=""
-					placeholder="Today is a beatiful day ... "
-					className="rounded-lg p-4 bg-black/5 border-2 border-solid border-black/10 font-mono font-medium text-sm">
+                <textarea
+                onChange={(e) =>
+                    setData('body', e.target.value)
+                }
+                onFocus={() => clearErrors("body")}
+                name="body"
+                id="body"
+                cols="30"
+                rows="5"
+                value={data.body}
+                maxLength="256"
+                required=""
+				placeholder="Today is a beatiful day ... "
+				className="rounded-lg p-4 bg-black/5 border-2 border-solid border-black/10 font-mono font-medium text-sm">
                 </textarea>
+
+                {errors.body && (
+                    <p className="text-red-500">{errors.body}</p>
+               )}
+
             </div>
             <button type="submit"
-				className="rounded-lg p-3 bg-blue-500/20 border-2 border-solid border-green-500/20 transition-colors hover:bg-blue-500/40 font-medium text-base leading-none flex flex-row items-center justify-center gap-2">
-                    
+            disabled={processing}
+			className={`rounded-lg p-3 bg-blue-500/20 border-2 border-solid border-green-500/20 transition-colors hover:bg-blue-500/40 font-medium text-base leading-none flex flex-row items-center justify-center gap-2
+                        // ${processing && "opacity-50"}
+                    `}>
+
 				<span className="font-bold">Eneter your post!</span>
 			</button>
         </fieldset>
     </form>
 </div>
+    <div className='py-3 flex justify-center'>
+        <button
+        onClick={refreshPosts}
+        className='text-sm text-indigo-500 hover:text-indigo-900'
+        type='button'
+        >
+            Refresh posts
+        </button>
+    </div>
+
+
     <div className="container mx-auto pt-12 pb-20">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
         {posts.data.map((post)=>{
                         return(
 
-            <div key={post.id} className="bg-white rounded-lg shadow-lg p-8">
+            <div key={post.id}
+            className="bg-white rounded-lg shadow-lg p-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">{post.user.name}</h2>
                 <p key={post.id} className="text-gray-700">
                     {post.body}
@@ -53,35 +115,12 @@ export default function Dashboard({auth, posts}) {
             )
         })}
 
-            
+
         </div>
     </div>
 </div>
 
-            {/* <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
 
-                    {posts.data.map((post)=>{
-                        return(
-                            <div key={post.id}>
-                                <div className='font-semibold'>
-                                    {post.user.name}
-                                </div>
-                                <p className='mt-1'>{post.body}</p>
-                            </div>
-
-                            // <div key={post.id} className="p-6 text-gray-900">
-                            //     {post.body}
-                            // </div>
-                        
-                        )
-                    })}
-
-                        
-                    </div>
-                </div>
-            </div> */}
         </AuthenticatedLayout>
     );
 }
