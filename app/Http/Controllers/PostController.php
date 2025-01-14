@@ -34,7 +34,7 @@ class PostController extends Controller
             // ->with('success', 'Post created successfully.');
             ->with('message', [
                 'type' => 'success',
-                'body' => 'Post created successfully!!'
+                'body' => 'Post cccreated successfully!!'
             ]);
     }
 }

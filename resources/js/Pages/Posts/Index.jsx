@@ -9,29 +9,31 @@ export default function Index({ auth, posts, now }) {
             body: "",
         });
 
-    // const page = usePage();
+    const page = usePage();
 
-    // useEffect(()=> {
-    //     if(page?.props?.message?.body){
-    //         toast(page.props.message.body, {
-    //             type: page.props.message.type,
-    //             position: "top-right",
-    //         })
-
-    //       }
-    // })
+    useEffect(()=> {
+        if(page?.props?.message?.body){
+            toast(page.props.message.body, {
+                type: page.props.message.type,
+                position: "top-right",
+                style: {
+                    border: '1px solid black',
+                },
+            });
+          }
+    }, [page.props.message]);
 
     function submit(e) {
         e.preventDefault();
         post(route('posts.store'), {
             onSuccess: () => {
                 reset('body')
-                toast.success('Message added successfully!',{
-                    position: "top-right",
-                    style: {
-                        border: '1px solid black',
-                      },
-                });
+                // toast.success('Message added successfully!',{
+                //     position: "top-right",
+                //     style: {
+                //         border: '1px solid black',
+                //       },
+                // });
             },
         });
     }
@@ -55,10 +57,7 @@ export default function Index({ auth, posts, now }) {
         >
             <Head title="Posts">
                 <meta name="description" content="Posts Index" />
-
             </Head>
-
-
 
 
             <div className="bg-gray-100 min-h-screen p-4">
@@ -67,7 +66,6 @@ export default function Index({ auth, posts, now }) {
             </div>
 
             <div>
-                {/* <button onClick={notify}>Make me a toast</button> */}
                 <Toaster />
             </div>
 
