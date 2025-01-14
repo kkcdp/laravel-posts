@@ -1,5 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router, usePage } from '@inertiajs/react';
+import { Head, useForm, router, usePage, Link } from '@inertiajs/react';
+import { useEffect } from 'react';
+import toast, {Toaster} from 'react-hot-toast';
 
 export default function Index({ auth, posts, now }) {
     const { data, setData, post, processing, errors, reset, clearErrors } =
@@ -7,13 +9,29 @@ export default function Index({ auth, posts, now }) {
             body: "",
         });
 
-    const page = usePage();
+    // const page = usePage();
+
+    // useEffect(()=> {
+    //     if(page?.props?.message?.body){
+    //         toast(page.props.message.body, {
+    //             type: page.props.message.type,
+    //             position: "top-right",
+    //         })
+
+    //       }
+    // })
 
     function submit(e) {
         e.preventDefault();
         post(route('posts.store'), {
             onSuccess: () => {
-                reset('body');
+                reset('body')
+                toast.success('Message added successfully!',{
+                    position: "top-right",
+                    style: {
+                        border: '1px solid black',
+                      },
+                });
             },
         });
     }
@@ -41,9 +59,16 @@ export default function Index({ auth, posts, now }) {
             </Head>
 
 
+
+
             <div className="bg-gray-100 min-h-screen p-4">
             <div>
                 <p>Time: {now}</p>
+            </div>
+
+            <div>
+                {/* <button onClick={notify}>Make me a toast</button> */}
+                <Toaster />
             </div>
 
             <div className="mt-4 p-4">
@@ -88,6 +113,18 @@ export default function Index({ auth, posts, now }) {
     </form>
 </div>
     <div className='py-3 flex justify-center'>
+        <Link
+            href={route('posts.index')}
+            only={['posts']}
+            preserveScroll
+        className='text-sm text-indigo-500 hover:text-indigo-900'
+        type='button'
+        >
+            Refresh posts
+        </Link>
+    </div>
+
+    {/* <div className='py-3 flex justify-center'>
         <button
         onClick={refreshPosts}
         className='text-sm text-indigo-500 hover:text-indigo-900'
@@ -95,7 +132,7 @@ export default function Index({ auth, posts, now }) {
         >
             Refresh posts
         </button>
-    </div>
+    </div> */}
 
 
     <div className="container mx-auto pt-12 pb-20">

@@ -31,6 +31,10 @@ class PostController extends Controller
         );
 
         return redirect()->route('posts.index')
-            ->with('success', 'Post created successfully.');
+            // ->with('success', 'Post created successfully.');
+            ->with('message', [
+                'type' => 'success',
+                'body' => 'Post created successfully!!'
+            ]);
     }
 }
