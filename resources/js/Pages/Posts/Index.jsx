@@ -75,7 +75,7 @@ export default function Index({ auth, posts, now }) {
     className="flex flex-col mx-auto gap-2 max-w-lg">
         <fieldset className="contents">
             <div className="flex flex-col">
-                <label htmlFor="input" className="font-semibold text-lg">
+                <label htmlFor="body" className="font-semibold text-lg">
                     Enter your post
 				</label>
                 <textarea
@@ -102,7 +102,7 @@ export default function Index({ auth, posts, now }) {
             <button type="submit"
             disabled={processing}
 			className={`rounded-lg p-3 bg-blue-500/20 border-2 border-solid border-green-500/20 transition-colors hover:bg-blue-500/40 font-medium text-base leading-none flex flex-row items-center justify-center gap-2
-                        // ${processing && "opacity-50"}
+                         ${processing && "opacity-50"}
                     `}>
 
 				<span className="font-bold">Eneter your post!</span>
